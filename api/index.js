@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
-import { error } from 'console';
+import cors from 'cors';
 
 
 dotenv.config();
@@ -18,6 +18,10 @@ mongoose.connect(process.env.MONGO).then(() => {
 
 
 const app = express();
+// Enable CORS for all routes
+app.use(cors());
+
+
 app.use(express.json());
 app.listen(3000,() => {
 console.log('Server is running in port 3000!!');

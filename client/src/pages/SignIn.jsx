@@ -6,6 +6,7 @@ import {
   signInSuccess,
   signInFailure,
 } from '../redux/user/userSlice';
+import OAuth from '../components/OAuth';
 
 
 export default function SignIn() {
@@ -56,6 +57,7 @@ catch(error)
       <input type='email' placeholder='email'className='border p-3 rounded-lg' id="email" onChange={handleChange}/>
       <input type='password' placeholder='password'className='border p-3 rounded-lg' id="password" onChange={handleChange}/>
       <button disabled={loading}  className='bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80'>{loading ? 'Loading....' : "Sign In"}</button>
+      <OAuth/>
     </form>
 
     {error && <p className="text-red-500">{error}</p>}

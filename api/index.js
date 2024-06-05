@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+
 
 
 dotenv.config();
@@ -20,6 +22,7 @@ mongoose.connect(process.env.MONGO).then(() => {
 const app = express();
 // Enable CORS for all routes
 app.use(cors());
+app.use(cookieParser());
 
 
 app.use(express.json());

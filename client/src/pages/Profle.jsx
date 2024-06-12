@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useRef } from 'react';
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage';
 import { app } from '../firebase';
-import { updateUserStart,udateUerSuccess,udateUserFailure } from '../redux/user/userSlice';
+import { updateUserStart,udateUerSuccess,udateUserFailure, deleteUserFailure,deleteUserStart,deleteUserSuccess, signOutUserFailure,signOutUserStart,signOutUserSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 
 export default function Profle() {
@@ -50,6 +50,50 @@ export default function Profle() {
 
   const handelChange =(e) => {
         setformData ({...formData,[e.target.id]:e.target.value})
+  }
+
+  const handleSignOut = async(e) => {
+    try{
+      dispatch(signoutUserStart());
+      const res = await fetch(`http://localhost:3000/api/auth/signout`,{                
+                  credentials: 'include'                
+              })
+              const data = await res.json();
+              if(data.success === false)
+                {
+                  dispatch(signOutUserFailure(data.message));
+                  return;
+                }
+              dispatch(signOutUserSuccess(data));
+    }
+    catch(error){
+deleteUserFailure(error.message);
+    }
+  }
+
+  const handelDeleteUser = async(e) => {
+    try{
+     
+      dispatch(deleteUserStart());
+      const res = await fetch(`http://localhost:3000/api/user/delete/${currentUser._id}`,{
+                  method:"DELETE",
+                  credentials: 'include',
+                  headers:{
+                    'content-type':'application/json'
+                  },
+                  body:JSON.stringify({formData}),
+              })
+              const data = await res.json();
+              if(data.success === false)
+                {
+                  dispatch(deleteUserFailure(data.message));
+                  return;
+                }
+              dispatch(deleteUserSuccess(data));
+    }
+    catch(error){
+deleteUserFailure(error.message);
+    }
   }
 
   const handelSubmit= async (e) =>{
@@ -102,8 +146,8 @@ export default function Profle() {
       </form>
       
       <div className='flex justify-between mt-5'>
-        <span className='text-red-700 cursor-pointer'>Delete account</span>
-        <span className='text-red-700 cursor-pointer'>Sign out</span>
+        <span onClick={handelDeleteUser} className='text-red-700 cursor-pointer'>Delete account</span>
+        <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>Sign out</span>
       </div>
       <p className='text-red-700 mt-5'>{error ? error : ''}</p>
       <p className='text-green-700 mt-5'>{updateSuccess ? 'User Updated Successfully' : ''}</p>

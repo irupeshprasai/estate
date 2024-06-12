@@ -11,7 +11,7 @@ import OAuth from '../components/OAuth';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const { loading, error } = useSelector((state) => state.user);
+  const { loading, error} = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handelSubmit = async(e) => {
@@ -22,6 +22,7 @@ try{
   const res =await fetch('http://localhost:3000/api/auth/signin',
     {
       method:"POST",
+      credentials: 'include',
       headers:{
         'content-type':'application/json'
       },
@@ -34,6 +35,7 @@ try{
       dispatch(signInFailure(data.message));
   return;
     }
+    
     dispatch(signInSuccess(data));
     navigate("/");
 }
@@ -48,7 +50,6 @@ catch(error)
       ...formData,
       [e.target.id] :e.target.value
     })
-    console.log(formData);
   }
   return (
     <div className='p-3 max-w-lg mx-auto'>
@@ -60,7 +61,7 @@ catch(error)
       <OAuth/>
     </form>
 
-    {error && <p className="text-red-500">{error}</p>}
+    {error  && <p className="text-red-500">{error}</p>}
     <div className='flex gap-2 mt-5'>
       <p>Dont Have a account?</p>
       <Link to={"/sign-Up"}>

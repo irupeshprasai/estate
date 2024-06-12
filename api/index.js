@@ -11,6 +11,7 @@ import cookieParser from 'cookie-parser';
 dotenv.config();
 
 
+
 mongoose.connect(process.env.MONGO).then(() => {
     console.log('Connected to MongoDB');
 })
@@ -21,11 +22,16 @@ mongoose.connect(process.env.MONGO).then(() => {
 
 const app = express();
 // Enable CORS for all routes
-app.use(cors());
-app.use(cookieParser());
+
 
 
 app.use(express.json());
+//app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true // This is important to allow sending cookies
+  }));
+app.use(cookieParser());
 app.listen(3000,() => {
 console.log('Server is running in port 3000!!');
 });

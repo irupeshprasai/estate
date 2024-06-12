@@ -43,7 +43,6 @@ try{
 catch(error)
 {
   setError('An error occurred. Please try again later.');
-      console.log(error);
     } finally {
       setLoading(false);
     }
